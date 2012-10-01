@@ -1,0 +1,107 @@
+const fs = require('fs');
+const util = require('util');
+
+const conf = require('./conf');
+const pinyin = require('./pinyin');
+const pinyinz = require('./pinyinz');
+
+const $call = function (f, args) { setTimeout(function () { f.apply(null, args); }, 0); };
+const $print = function () { process.stdout.write(util.format.apply(null, arguments)); };
+const $input = (function () {
+  var listener = [];
+  process.stdin.resume();
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('data', function (chunk) {
+    var line = chunk.replace(/\r|\n/g, '');
+    if (listener.length) {
+      $call(listener[0], [line]);
+      lines = '';
+      listener = listener.slice(1);
+    }
+  });
+  process.stdin.on('end', function () { process.exit(0); });
+  return function (callback) { listener[listener.length] = callback; };
+}());
+
+const reads = (function (filename) {
+  var conf_reads = {};
+  try { conf_reads = JSON.parse(fs.readFileSync(filename, 'utf8')); } catch (e) {};
+  var writeConf = function () {
+    var text = JSON.stringify(conf_reads).replace(/,/g, ',\n').replace('{', '{\n').replace('}', '\n}');
+    fs.writeFileSync(filename, text, 'utf8');
+  };
+  var readsOfWord = function (w, callback) {
+    var currentChar = 0, defaultRead = true, a = [];
+    (function () {
+      var readsOfNextChar = function () {
+        var nextChar = arguments.callee;
+        var ret = function (r) {
+          a[a.length] = r;
+          if (currentChar === w.length) (function () {
+            var aj = a.join('');
+            if (!defaultRead) { conf_reads[w] = aj; writeConf(); };
+            $call(callback, [aj]);
+          }()); else $call(nextChar);
+        };
+        var i = currentChar++;
+        if (('.' + w[i]) in conf_reads) return ret(conf_reads['.' + w[i]]);
+        if (w[i].charCodeAt(0) <= 127) return ret(w[i].toUpperCase());
+        var r = pinyin[w[i]] || []; if (r.length === 1) return ret(r[0] + w[i]);
+        $print("%s%s\n",
+          util.format('%s[%s]%s', w.slice(0, i), w[i], w.slice(i + 1)),
+          (r.length > 0 ?  ('\n' + r.map(function (s, i) { 
+            return util.format('%d: %s  ', i + 1, s);
+          }).join('')) : '')
+        );
+        (function () {
+          var ask = arguments.callee;
+          $print('> ');
+          $input(function (userread) {
+            var n, add2Default = false;
+            var rret = function (r) {
+              if (add2Default) { conf_reads['.' + w[i]] = r; writeConf(); }
+              else defaultRead = false;
+              ret(r);
+            };
+            if (userread[0] === '0') { add2Default = true; userread = userread.slice(1); }
+            if (userread === '') userread = '1';
+            if (n = Number(userread)) { if (n > 0 && n <= r.length) return rret(r[n - 1] + w[i]); }
+            if (userread[0] === '\'') return rret(userread.slice(1).replace('$$', w[i]));
+            userread = userread.toLowerCase().replace(/v(.*)$/, 'u$1:');
+            if (pinyinz.indexOf(userread) !== -1) return rret(userread + w[i]);
+            ask();
+          });
+        }());
+      };
+      readsOfNextChar();
+    }());
+  };
+  var lookupWord = function (w, callback) {
+    if (!w) $call(callback);
+    else if (w in conf_reads) $call(callback, [conf_reads[w]]);
+    else readsOfWord(w, function (a) { $call(callback, [a]); });
+  };
+  return function (wl, callback) {
+    var currentWord = 0, a = {};
+    (function () {
+      var i = currentWord++, nextWord = arguments.callee;
+      if (i === wl.length) return $call(callback, [a]);
+      if (!wl[i]) return $call(nextWord);
+      lookupWord(wl[i], function (r) { a[r] = wl[i]; $call(nextWord); });
+    }());
+  };
+}(conf.读音));
+
+
+const mina = function () {
+  var words = fs.readFileSync(conf.词条, 'utf8');
+  var wordlist = {};
+  words = words.replace(/\r/g, '\n').replace(/\n\n\n*/g, '\n').split('\n')
+   .map(function (l) { var s = l.split('\t'); wordlist[s[0]] = s[1]; return s[0]; });
+  reads(words, function (words) {
+    $print(words);
+    process.stdin.pause();
+  });
+};
+
+mina();

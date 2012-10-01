@@ -1,7 +1,7 @@
 const fs = require('fs');
 const util = require('util');
 
-const conf = require('./conf');
+const 设置 = require('./设置');
 const pinyin = require('./pinyin');
 const pinyinz = require('./pinyinz');
 
@@ -24,10 +24,10 @@ const $input = (function () {
 }());
 
 const reads = (function (filename) {
-  var conf_reads = {};
-  try { conf_reads = JSON.parse(fs.readFileSync(filename, 'utf8')); } catch (e) {};
+  var 设置_reads = {};
+  try { 设置_reads = JSON.parse(fs.readFileSync(filename, 'utf8')); } catch (e) {};
   var writeConf = function () {
-    var text = JSON.stringify(conf_reads).replace(/,/g, ',\n').replace('{', '{\n').replace('}', '\n}');
+    var text = JSON.stringify(设置_reads).replace(/,/g, ',\n').replace('{', '{\n').replace('}', '\n}');
     fs.writeFileSync(filename, text, 'utf8');
   };
   var readsOfWord = function (w, callback) {
@@ -39,12 +39,13 @@ const reads = (function (filename) {
           a[a.length] = r;
           if (currentChar === w.length) (function () {
             var aj = a.join('');
-            if (!defaultRead) { conf_reads[w] = aj; writeConf(); };
+            if (!defaultRead) { 设置_reads[w] = aj; writeConf(); };
             $call(callback, [aj]);
           }()); else $call(nextChar);
         };
         var i = currentChar++;
-        if (('.' + w[i]) in conf_reads) return ret(conf_reads['.' + w[i]]);
+        if (('.' + w[i]) in 设置_reads) return ret(设置_reads['.' + w[i]]);
+        if (w[i] === ' ' || w[i] === '　') return ret('  ');
         if (w[i].charCodeAt(0) <= 127) return ret(w[i].toUpperCase());
         var r = pinyin[w[i]] || []; if (r.length === 1) return ret(r[0] + w[i]);
         $print("%s%s\n",
@@ -59,7 +60,7 @@ const reads = (function (filename) {
           $input(function (userread) {
             var n, add2Default = false;
             var rret = function (r) {
-              if (add2Default) { conf_reads['.' + w[i]] = r; writeConf(); }
+              if (add2Default) { 设置_reads['.' + w[i]] = r; writeConf(); }
               else defaultRead = false;
               ret(r);
             };
@@ -78,7 +79,7 @@ const reads = (function (filename) {
   };
   var lookupWord = function (w, callback) {
     if (!w) $call(callback);
-    else if (w in conf_reads) $call(callback, [conf_reads[w]]);
+    else if (w in 设置_reads) $call(callback, [设置_reads[w]]);
     else readsOfWord(w, function (a) { $call(callback, [a]); });
   };
   return function (wl, callback) {
@@ -90,16 +91,32 @@ const reads = (function (filename) {
       lookupWord(wl[i], function (r) { a[r] = wl[i]; $call(nextWord); });
     }());
   };
-}(conf.读音));
+}(设置.读音));
 
 
 const mina = function () {
-  var words = fs.readFileSync(conf.词条, 'utf8');
+  var words = fs.readFileSync(设置.词条, 'utf8');
   var wordlist = {};
   words = words.replace(/\r/g, '\n').replace(/\n\n\n*/g, '\n').split('\n')
-   .map(function (l) { var s = l.split('\t'); wordlist[s[0]] = s[1]; return s[0]; });
+   .map(function (l) {
+     var s = l.split('\t');
+     if (s[0] in wordlist) { wordlist[s[0]] += 设置.分隔符 + s[1]; return ''; }
+     else { wordlist[s[0]] = s[1]; return s[0]; };
+  });
   reads(words, function (words) {
-    $print(words);
+    var w, list = [];
+    for (w in words) list[list.length] = w; list.sort();
+    var result = list.map(function (w) {
+      return {
+        'title': (w[0] >= 'a' && w[0] <= 'z') ? w[0].toUpperCase() : '-',
+        'char': words[w][0],
+        'word': words[w],
+        'index': wordlist[words[w]]
+      };
+    });
+    var output = JSON.stringify(result)
+      .replace(/},/g, '},\n').replace('[', '[\n').replace(']', '\n]');
+    fs.writeFileSync(设置.输出, output, 'utf8');
     process.stdin.pause();
   });
 };

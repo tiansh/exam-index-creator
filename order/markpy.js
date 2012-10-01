@@ -109,6 +109,7 @@ const mina = function () {
   words = words.replace(/\r/g, '\n').replace(/\n\n\n*/g, '\n').split('\n')
    .map(function (l) {
      var s = l.split('\t');
+     s[0] = s[0].replace(/\$</g, '').replace(/>\$/g, '');
      if (s[0] in wordlist) { wordlist[s[0]] += 设置.分隔符 + s[1]; return ''; }
      else { wordlist[s[0]] = s[1]; return s[0]; };
   });

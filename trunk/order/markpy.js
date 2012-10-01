@@ -109,7 +109,6 @@ const mina = function () {
   words = words.replace(/\r/g, '\n').replace(/\n\n\n*/g, '\n').split('\n')
    .map(function (l) {
      var s = l.split('\t');
-     s[0] = s[0].replace(/\$</g, '').replace(/>\$/g, '');
      if (s[0] in wordlist) { wordlist[s[0]] += 设置.分隔符 + s[1]; return ''; }
      else { wordlist[s[0]] = s[1]; return s[0]; };
   });
@@ -117,10 +116,11 @@ const mina = function () {
     var w, list = [];
     for (w in words) list[list.length] = w; list.sort();
     var result = list.map(function (w) {
+      var tw = words[w].replace(/\$</g, '').replace(/>\$/g, '');
       return {
         'title': (w[0] >= 'a' && w[0] <= 'z') ? w[0].toUpperCase() : '-',
-        'char': words[w][0],
-        'word': words[w],
+        'char': tw[0],
+        'word': tw,
         'index': wordlist[words[w]]
       };
     });

@@ -44,6 +44,15 @@ const reads = (function (filename) {
           }()); else $call(nextChar);
         };
         var i = currentChar++;
+        if (w.slice(i, i + 2) === '$<') (function () {
+          currentChar += 2;
+          var start = i + 2, end = currentChar++;
+          while (w.slice(end, end + 2) !== '>$') {
+            if (currentChar < w.length) end = (currentChar++ - 1);
+            else { end = w.length; break; }
+          };
+          ret(w.slice(start, end));
+        }());
         if (('.' + w[i]) in 设置_reads) return ret(设置_reads['.' + w[i]]);
         if (w[i] === ' ' || w[i] === '　') return ret('  ');
         if (w[i].charCodeAt(0) <= 127) return ret(w[i].toUpperCase());

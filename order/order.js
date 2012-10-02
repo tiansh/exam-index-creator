@@ -51,7 +51,7 @@ const reads = (function (filename) {
             if (currentChar < w.length) end = (currentChar++ - 1);
             else { end = w.length; break; }
           };
-          ret(w.slice(start, end));
+          ret(w.slice(start, end).replace(/\$/, '');
         }());
         if (('.' + w[i]) in 设置_reads) return ret(设置_reads['.' + w[i]]);
         if (w[i] === ' ' || w[i] === '　') return ret('  ');
@@ -116,7 +116,7 @@ const mina = function () {
     var w, list = [];
     for (w in words) list[list.length] = w; list.sort();
     var result = list.map(function (w) {
-      var tw = words[w].replace(/\$</g, '').replace(/>\$/g, '');
+      var tw = words[w].replace(/\$<[^$]*$/g, '').replace(/>\$/g, '');
       return {
         'title': (w[0] >= 'a' && w[0] <= 'z') ? w[0].toUpperCase() : '-',
         'char': tw[0],
@@ -126,7 +126,7 @@ const mina = function () {
     });
     var output = JSON.stringify(result)
       .replace(/},/g, '},\n').replace('[', '[\n').replace(']', '\n]');
-    fs.writeFileSync(设置.输出, output, 'utf8');
+    fs.writeFileSync(设置.排序, output, 'utf8');
     process.stdin.pause();
   });
 };

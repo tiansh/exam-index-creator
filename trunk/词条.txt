@@ -51,7 +51,7 @@ SWEBOK	1-37
 设计	1-43
 编程	1-44
 编程的误区	1-45
-误区（编程）	1-45
+误区 (编程)	1-45
 测试	1-46
 部署	1-47
 分配比例	1-48
@@ -197,7 +197,7 @@ Vision	3-50
 用户界面描述	3-62
 SRS模板	3-63
 传统技术SRS模板	3-63
-Use-Case技术SRS模板	3-64
+Use - Case技术SRS模板	3-64
 需求验证	3-65
 评审方法	3-66
 需求评审	3-67
@@ -208,7 +208,7 @@ Use-Case技术SRS模板	3-64
 Object Technology	4.2-3
 对象技术	4.2-3
 面向对象分析	4.2-7
-Object-orientation	4.2-7
+Object - orientation	4.2-7
 OO	4.2-7
 UML历史	4.2-8
 面向对象	4.2-9
@@ -233,24 +233,24 @@ UML类表达	4.2-24
 类-对象关系	4.2-25
 Package	4.2-26
 包定义	4.2-26
-Use-Case 技术	4.2-29
+Use - Case 技术	4.2-29
 用例技术	4.2-29
-Use-Case	4.2-29
+Use - Case	4.2-29
 用例	4.2-29
-Use-Case模型组成	4.2-30
+Use - Case模型组成	4.2-30
 用例模型组成	4.2-30
-Use-Case建模步骤	4.2-31
+Use - Case建模步骤	4.2-31
 用例建模步骤	4.2-31
-Use-Case建模步骤	4.2-31
+Use - Case建模步骤	4.2-31
 Actor 定义	4.2-33
 参与者 定义	4.2-33
 Actor 识别	4.2-34
 参与者 识别	4.2-34
-Use-Case识别	4.2-34
+Use - Case识别	4.2-34
 用例识别	4.2-34
-Communications-Association	4.2-37
+Communications - Association	4.2-37
 通信-关联	4.2-37
-Use-Case Specification	4.2-40
+Use - Case Specification	4.2-40
 用例规约	4.2-40
 Alternative Flow	4.2-41
 Basic Flow	4.2-41
@@ -266,13 +266,13 @@ Partitions	4.2-50
 泳道	4.2-50
 前置条件	4.2-51
 后置条件	4.2-52
-Use-case图	4.2-53
+Use - case图	4.2-53
 活动图	4.2-53
 交互图	4.2-53
 扩展点	4.2-53
 特殊需求 (用例)	4.2-53
 用户界面框图	4.2-53
-Use-Case间的关系	4.2-55
+Use - Case间的关系	4.2-55
 关系 (用例)	4.2-55
 Include (Use-Case)	4.2-57
 包含 (用例)	4.2-57
@@ -332,7 +332,7 @@ Association	4.2-109
 关联关系	4.2-109
 Visibility	4.2-110
 可见度	4.2-110
-Use-Case Realization	4.2-116
+Use - e Realization	4.2-116
 用例实现	4.2-116
 分析类	4.2-117
 Analysis Class	4.2-117
@@ -422,8 +422,8 @@ Distributed System	5-38
 交互系统	5-39
 Interactive System	5-39
 MVC	5-39
-Model-View-Controller	5-39
-Presentation-abstraction-control 	5-39
+Model - View - Controller	5-39
+Presentation - abstraction - control 	5-39
 PAC	5-39
 Adaptable System	5-39
 适应系统	5-39
@@ -538,7 +538,7 @@ Final State	6.2-77
 最终状态	6.2-77
 唱片播放器	6.2-79
 Activity (State)	6.2-80
-Action （State)	6.2-80
+Action (State)	6.2-80
 活动 (状态机图)	6.2-80
 动作 (状态机图)	6.2-80
 关键状态	6.2-83
@@ -549,7 +549,7 @@ Association Class	6.2-86
 关联类	6.2-86
 Forward Engineering	6.2-87
 Reverse Engineering	6.2-87
-Round-Trip Engineering	6.2-87
+Round - p Engineering	6.2-87
 逆向工程	6.2-87
 双向工程	6.2-87
 正向工程	6.2-87
@@ -637,7 +637,7 @@ Forth	8-6
 Modula	8-6
 PL/I	8-6
 SNOBOL	8-6
-应用领域 （语言)	8-6
+应用领域 (语言)	8-6
 Script Language	8-7
 脚本语言	8-7
 Awk	8-8
@@ -662,7 +662,7 @@ Code Documentation	8-22
 逆向工程	8-24
 Forward Engineering	8-24
 Reverse Engineering	8-24
-Round-Trip Engineering	8-24
+Round - p Engineering	8-24
 双向工程	8-24
 竞赛	8-26
 软件配置	8-28
@@ -673,8 +673,8 @@ Baseline	8-30
 版本控制	8-31
 CM Repository	8-32
 配置库	8-32
-Check-in	8-33
-Check-out	8-33
+Check - n	8-33
+Check - t	8-33
 检出	8-33
 检入	8-33
 并行开发	8-34
@@ -771,7 +771,7 @@ COCOMO	10-31
 分工	10-35
 结构 (团队)	10-35
 团队结构和分工	10-35
-Rayleigh-Norden曲线	10-36
+Rayleigh - n曲线	10-36
 Brooks 定律	10-37
 布鲁克斯定律	10-37
 人员时间权衡定律	10-37

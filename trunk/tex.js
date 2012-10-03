@@ -9,14 +9,14 @@ const header = [
   '\\usepackage{fontspec}',
   '\\setmainfont[AutoFakeBold=4]{(字体)}',
   '\\setlength{\\parindent}{0em}',
+  '\\pagestyle{empty}',
   '\\usepackage[top=(上页边距), bottom=(下页边距), left=(左页边距), right=(右页边距)]{geometry}',
   '\\usepackage{multirow}',
   '\\usepackage{array}',
   '\\setlength{\\extrarowheight}{1pt}',
   '\\begin{document}',
   '{\\bf (课程名称)} (任课教师) \\\\',
-  '(考试时间) (考试地点) \\\\',
-  '\n'
+  '(考试时间) (考试地点) \\\\ \n',
 ].join('\n');
 const footer = '\\end{document}\n';
 const thead = [
@@ -55,18 +55,26 @@ const calcLines = (function () {
   const calcWidth = function (s) { return 2 * Number(s.slice(0, -2)); };
   var width3 = calcWidth(设置.词条列宽度), width4 = calcWidth(设置.页码列宽度);
   const handleSpace = function (text, width) {
-    var wl = (' ' + text + ' ').replace(/\s+/g, ' ').slice(1, -1).split(' ');
-    var lines = 1, chars = 0, i, s = [], len;
-    for (i = 0; i < wl.length; i++) {
-      len = wl[i].replace(/[^\u0020-\u007e]/g, '..').length;
-      wl[i] = TeXEscape(wl[i]);
-      if (chars + len > width) {
-        chars = len; lines++; s = s.concat([br, wl[i]]);
+    var wl = (' ' + text + ' ').replace(/\s+/g, ' ').slice(1, -1);
+    var lines = 0, lb = '', wb = '', s = [], i, ls = false;
+    const pushlb = function () {
+      if (lb.length + wb.length + (ls ? 1 : 0) > width) {
+        s[lines++] = lb; lb = wb; wb = ''; return false;
       } else {
-        chars += len; s[s.length] = wl[i];
-      };
+        lb += (ls ? ' ' : '') + wb; wb = ''; return true;
+      }
     };
-    return {'text': s.join(' '), 'lines': lines};
+    for (i = 0; i < wl.length; i++)
+      if (wl[i] === ' ') {
+        ls = pushlb();
+      } else if (wl.charCodeAt(i) > 32 && wl.charCodeAt(i) < 127) {
+        wb += wl[i];
+      } else {
+        pushlb(); wb = wl[i]; ls = false; pushlb();
+      };
+    pushlb();
+    s[lines++] = lb;
+    return {'text': s.join(br), 'lines': lines};
   };
   return function (line) {
     var w = handleSpace(line.word, width3), i = handleSpace(line.index, width4);
@@ -82,7 +90,7 @@ const calcLines = (function () {
 
 const splitPage = function (lines) {
   var splited = [];
-  var currentPage = [], currentPageLines = 3;
+  var currentPage = [], currentPageLines = 2;
   var maxLines = 设置.每页行数;
   var i;
   for (i = 0; i < lines.length; i++) {

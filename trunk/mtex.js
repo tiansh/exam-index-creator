@@ -61,7 +61,7 @@ const calcLines = (function () {
       if (lb.length + wb.length + (ls ? 1 : 0) > width) {
         s[lines++] = lb; lb = wb; wb = ''; return false;
       } else {
-        lb += (ls ? ' ' : '') + wb; wb = ''; return true;
+        lb += (ls ? '\\ ' : '') + wb; wb = ''; return true;
       }
     };
     for (i = 0; i < wl.length; i++)

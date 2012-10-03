@@ -51,7 +51,7 @@ const reads = (function (filename) {
             if (currentChar < w.length) end = (currentChar++ - 1);
             else { end = w.length; break; }
           };
-          ret(w.slice(start, end).replace(/\$/, '');
+          ret(w.slice(start, end).replace(/\$/, ''));
         }());
         if (('.' + w[i]) in 设置_reads) return ret(设置_reads['.' + w[i]]);
         if (w[i] === ' ' || w[i] === '　') return ret('  ');
@@ -119,7 +119,7 @@ const mina = function () {
       var tw = words[w].replace(/\$<[^$]*$/g, '').replace(/>\$/g, '');
       return {
         'title': (w[0] >= 'a' && w[0] <= 'z') ? w[0].toUpperCase() : '-',
-        'char': tw[0],
+        'char': tw[0].toUpperCase(),
         'word': tw,
         'index': wordlist[words[w]]
       };

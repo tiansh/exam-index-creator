@@ -10,6 +10,7 @@ const header = [
   '\\setmainfont[AutoFakeBold=4]{(字体)}',
   '\\setlength{\\parindent}{0em}',
   '\\pagestyle{empty}',
+  '\\CJKsetecglue{}',
   '\\usepackage[top=(上页边距), bottom=(下页边距), left=(左页边距), right=(右页边距)]{geometry}',
   '\\usepackage{multirow}',
   '\\usepackage{array}',

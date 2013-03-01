@@ -30,8 +30,9 @@ const thead = [
 ].join('');
 const tfoot = '\\end{tabular}\n';
 const tr = function (title, char_, word, index, borderBottom) {
+  var cline = (borderBottom === '') ? '' : ['\\cline{', borderBottom, '}'].join('');
   return [
-   title, ' & ', char_, ' & ', word, ' & ', index, '\\\\ \\cline{', borderBottom, '}\n'
+   title, ' & ', char_, ' & ', word, ' & ', index, '\\\\ ', cline, '\n'
   ].join('');
 }
 const td1_rowspan = function (rowspan, inner) {
@@ -107,6 +108,37 @@ const splitPage = function (lines) {
   return splited;
 };
 
+const breakLines = function (lines) {
+  return lines.map(function (page) {
+    var cl = function (l) { return JSON.parse(JSON.stringify(l)); };
+    var l = [];
+    var al = function (line) {
+      l.lines = 1;
+      l[l.length] = cl(line);
+    };
+    var rms = function (s) {
+      return (' ' + s + ' ').replace(/\s+/g, ' ').slice(1, -1);
+    };
+    page.map(function (line) {
+      line.breakl = false;
+      if (line.lines === 1) al(line);
+      else {
+        var word = line.word.split(/\\newline/g);
+        var index = line.index.split(/\\newline/g);
+        var i, bakl = cl(line);
+        bakl.lines = 1;
+        for (i = 0; i < line.lines; i++) {
+          bakl.word = i < word.length ? word[i] : '';
+          bakl.index = i < index.length ? index[i] : '';
+          al(bakl);
+          bakl.breakl = true;
+        }
+      }
+    });
+    return l;
+  });
+};
+
 const makeTree = function(lines) {
   var i, currentTitle = 0, currentChar = 0;
   lines[0].tlines = lines[0].clines = 1;
@@ -135,6 +167,7 @@ const makeTree = function(lines) {
       lines[i].tlinest = lines[i].lines;
       lines[i - 1].bborder = '1-4';
     }
+    if (lines[i].breakl) lines[i - 1].bborder = '';
   }
   lines[i - 1].bborder = '1-4';
   return lines;
@@ -169,6 +202,8 @@ const mina = function () {
   var lines = JSON.parse(fs.readFileSync(设置.排序));
   lines = lines.map(calcLines);
   lines = splitPage(lines);
+  lines = breakLines(lines);
+  console.log(lines);
   lines = lines.map(makeTree);
   lines = makeTeX(lines);
   fs.writeFileSync(设置.输出, lines, 'utf8');

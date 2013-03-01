@@ -57,10 +57,10 @@ const reads = (function (filename) {
         if (w[i] === ' ' || w[i] === '　') return ret('  ');
         if (w[i].charCodeAt(0) <= 127) return ret(w[i].toUpperCase());
         var r = pinyin[w[i]] || []; if (r.length === 1) return ret(r[0] + w[i]);
-        $print("%s%s\n",
+        $print("\u001b[32m%s%s\u001b[0m\n",
           util.format('%s[%s]%s', w.slice(0, i), w[i], w.slice(i + 1)),
           (r.length > 0 ?  ('\n' + r.map(function (s, i) { 
-            return util.format('%d: %s  ', i + 1, s);
+            return util.format('\u001b[36m%d\u001b[0m: \u001b[33m%s  ', i + 1, s);
           }).join('')) : '')
         );
         (function () {

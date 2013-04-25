@@ -61,9 +61,9 @@ const calcLines = (function () {
     var lines = 0, lb = '', wb = '', s = [], i, ls = false;
     const pushlb = function () {
       if (lb.length + wb.length + (ls ? 1 : 0) > width) {
-        s[lines++] = lb; lb = wb; wb = ''; return false;
+        s[lines++] = TeXEscape(lb); lb = wb; wb = ''; return false;
       } else {
-        lb += (ls ? '\\ ' : '') + wb; wb = ''; return true;
+        lb += (ls ? ' ' : '') + wb; wb = ''; return true;
       }
     };
     for (i = 0; i < wl.length; i++)
@@ -75,7 +75,7 @@ const calcLines = (function () {
         pushlb(); wb = wl[i]; ls = false; pushlb();
       };
     pushlb();
-    s[lines++] = lb;
+    s[lines++] = TeXEscape(lb);
     return {'text': s.join(br), 'lines': lines};
   };
   return function (line) {
@@ -203,11 +203,9 @@ const mina = function () {
   lines = lines.map(calcLines);
   lines = splitPage(lines);
   lines = breakLines(lines);
-  console.log(lines);
   lines = lines.map(makeTree);
   lines = makeTeX(lines);
   fs.writeFileSync(设置.输出, lines, 'utf8');
 };
 
 mina();
-

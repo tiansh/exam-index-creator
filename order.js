@@ -44,14 +44,14 @@ const reads = (function (filename) {
           }()); else $call(nextChar);
         };
         var i = currentChar++;
-        if (w.slice(i, i + 2) === '$<') (function () {
+        if (w.slice(i, i + 2) === '$<') return (function () {
           currentChar += 2;
           var start = i + 2, end = currentChar++;
           while (w.slice(end, end + 2) !== '>$') {
             if (currentChar < w.length) end = (currentChar++ - 1);
             else { end = w.length; break; }
           };
-          ret(w.slice(start, end).replace(/\$/, ''));
+          return ret(w.slice(start, end).replace(/\$/, ''));
         }());
         if (('.' + w[i]) in 设置_reads) return ret(设置_reads['.' + w[i]]);
         if (w[i] === ' ' || w[i] === '　') return ret('  ');
@@ -116,7 +116,7 @@ const mina = function () {
     var w, list = [];
     for (w in words) list[list.length] = w; list.sort();
     var result = list.map(function (w) {
-      var tw = words[w].replace(/\$<[^$]*$/g, '').replace(/>\$/g, '');
+      var tw = words[w].replace(/\$<[^$]*\$([^$]*)>\$/g, '$1');
       return {
         'title': (w[0] >= 'a' && w[0] <= 'z') ? w[0].toUpperCase() : '-',
         'char': tw[0].toUpperCase(),
@@ -132,3 +132,4 @@ const mina = function () {
 };
 
 mina();
+

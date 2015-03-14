@@ -1,0 +1,16 @@
+= exam-index-creator =
+Automatically exported from code.google.com/p/exam-index-creator
+
+----
+
+这'''不是'''文件索引软件，这'''不是'''文件搜索软件，总之这是个排版用的东西。
+
+每次某开卷考试弄个索引排版就得半天，而且“重chong载”、“重zhong载”什么的多音字又烦人得要死，所以有的这个东西。
+
+多音字我这没频率统计，所以只能每个输入都靠人工处理，不知道怎么弄比较好。
+
+考虑到我这么一个只会做前端的人，虽然修了个Python，但是感觉那东西实在太麻烦了，最后还是NodeJS，嗯JavaScript。
+
+详细的使用说明看WiKi好了，需要先装好NodeJS和LaTeX。
+
+要特别说明的一点是标拼音的那个pinyin.js文件版权上可能会有问题，而且也难免会有错。顺便求一个靠谱且没任何版权问题的版本。 
